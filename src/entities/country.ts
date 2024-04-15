@@ -6,6 +6,7 @@ type CountryData = {
   code: string;
   name: string;
   emoji: string;
+  continentCode: string;
 };
 
 @ObjectType()
@@ -23,11 +24,16 @@ export class Country extends BaseEntity {
   @Column()
   emoji!: string;
 
+  @Field()
+  @Column()
+  continentCode!: string;
+
   static async saveNewCountry(countryData: CountryData): Promise<Country> {
     const newCountry = new Country();
     newCountry.code = countryData.code;
     newCountry.name = countryData.name;
     newCountry.emoji = countryData.emoji;
+    newCountry.continentCode = countryData.continentCode;
 
     await Country.save(newCountry);
     return newCountry;
@@ -40,5 +46,20 @@ export class Country extends BaseEntity {
   static async findCountryByCode(code: string): Promise<Country | string> {
     const country = await Country.findOne({ where: { code } });
     return country || "Country not found";
+  }
+
+  static async findCountriesByContinent(
+    continentCode: string
+  ): Promise<Country[]> {
+    return Country.find({ where: { continentCode } });
+  }
+
+  static async deleteCountry(code: string): Promise<string> {
+    const country = await Country.findOne({ where: { code } });
+    if (country) {
+      await Country.remove(country);
+      return "Country deleted";
+    }
+    return "Country not found";
   }
 }

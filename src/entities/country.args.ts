@@ -10,4 +10,7 @@ export class CountryArgs {
 
   @Field()
   emoji!: string;
+
+  @Field()
+  continentCode!: string;
 }
