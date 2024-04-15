@@ -16,4 +16,11 @@ export class CountryResolver {
   async findAllCountries(): Promise<Country[]> {
     return Country.findAllCountries();
   }
+
+  @Query(() => Country, { nullable: true })
+  async findCountryByCode(
+    @Arg("code") code: string
+  ): Promise<Country | string> {
+    return Country.findCountryByCode(code);
+  }
 }

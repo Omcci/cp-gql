@@ -36,4 +36,9 @@ export class Country extends BaseEntity {
   static async findAllCountries(): Promise<Country[]> {
     return Country.find();
   }
+
+  static async findCountryByCode(code: string): Promise<Country | string> {
+    const country = await Country.findOne({ where: { code } });
+    return country || "Country not found";
+  }
 }
